@@ -1,38 +1,55 @@
 package fr.isen.giusiano.isensmartcompanion.screens
 
 import android.content.Intent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import fr.isen.giusiano.isensmartcompanion.EventDetailActivity
+import fr.isen.giusiano.isensmartcompanion.models.Event
 
 @Composable
 fun EventsScreen() {
     val context = LocalContext.current
+    val events = listOf(
+        Event(1, "BDE Evening", "A fun evening organized by the BDE.", "March 10, 2025", "ISEN Campus", "Party"),
+        Event(2, "Gala", "Annual ISEN Gala with dinner and awards.", "April 15, 2025", "Grand Hotel", "Formal"),
+        Event(3, "Cohesion Day", "A day full of activities to strengthen bonds.", "May 5, 2025", "City Park", "Team Building")
+    )
 
-    Column(
+    LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentPadding = PaddingValues(16.dp)
     ) {
-        Text(text = "Events")
+        items(events) { event ->
+            EventItem(event) {
+                val intent = Intent(context, EventDetailActivity::class.java).apply {
+                    putExtra("event", event)
+                }
+                context.startActivity(intent)
+            }
+        }
+    }
+}
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            val intent = Intent(context, EventDetailActivity::class.java)
-            context.startActivity(intent)
-        }) {
-            Text("Go to Event Details")
+@Composable
+fun EventItem(event: Event, onClick: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable { onClick() },
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = event.title, style = MaterialTheme.typography.headlineSmall)
+            Text(text = event.date, style = MaterialTheme.typography.bodyMedium)
+            Text(text = event.location, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

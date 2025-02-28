@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.isen.giusiano.isensmartcompanion.screens.EventsScreen
+import fr.isen.giusiano.isensmartcompanion.screens.HistoryScreen
 import fr.isen.giusiano.isensmartcompanion.screens.MainScreen
 import fr.isen.giusiano.isensmartcompanion.screens.TabView
 import fr.isen.giusiano.isensmartcompanion.ui.theme.ISENSmartCompanionTheme
@@ -56,10 +57,10 @@ class MainActivity : ComponentActivity() {
                                 MainScreen(innerPadding)
                             }
                             composable(eventsTab.title) {
-                                EventsScreen()
+                                EventsScreen(innerPadding)
                             }
                             composable(historyTab.title) {
-                                Text(historyTab.title)
+                                HistoryScreen(innerPadding)
                             }
                         }
 

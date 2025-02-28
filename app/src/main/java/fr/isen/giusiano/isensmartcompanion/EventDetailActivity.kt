@@ -8,13 +8,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import fr.isen.giusiano.isensmartcompanion.models.Event
+import fr.isen.giusiano.isensmartcompanion.model.Event
 
 class EventDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val event = intent.getSerializableExtra("event") as? Event
+        val event = intent.getParcelableExtra<Event>("event")
 
         setContent {
             if (event != null) {

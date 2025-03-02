@@ -14,27 +14,26 @@ import androidx.compose.ui.unit.dp
 import fr.isen.giusiano.isensmartcompanion.EventDetailActivity
 import fr.isen.giusiano.isensmartcompanion.api.RetrofitInstance
 import fr.isen.giusiano.isensmartcompanion.model.Event
-import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun EventsScreen(innerPadding: PaddingValues) {
     val context = LocalContext.current
     val events = remember { mutableStateOf<List<Event>>(listOf()) }
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            try {
-                val response = RetrofitInstance.api.getEvents()
-                if (response.isSuccessful) {
-                    events.value = response.body() ?: listOf()
-                } else {
-                    Log.e("EventsScreen", "API Error: ${response.code()}")
+        val response = RetrofitInstance.api.getEvents()
+        response.enqueue(object : Callback<List<Event>> {
+                override fun onResponse(p0: Call<List<Event>>, p1: Response<List<Event>>) {
+                    events.value = p1.body() ?: listOf()
                 }
-            } catch (e: Exception) {
-                Log.e("EventsScreen", "Exception: ${e.message}")
-            }
-        }
+
+                override fun onFailure(p0: Call<List<Event>>, p1: Throwable) {
+                    Log.e("Request", p1.message ?: "Request failed")
+                }
+            })
     }
 
     LazyColumn(

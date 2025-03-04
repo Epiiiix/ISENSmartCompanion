@@ -8,10 +8,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fr.isen.giusiano.isensmartcompanion.EventDetailActivity
+import fr.isen.giusiano.isensmartcompanion.R
 import fr.isen.giusiano.isensmartcompanion.api.RetrofitInstance
 import fr.isen.giusiano.isensmartcompanion.models.Event
 import retrofit2.Call
@@ -26,26 +30,40 @@ fun EventsScreen(innerPadding: PaddingValues) {
     LaunchedEffect(Unit) {
         val response = RetrofitInstance.api.getEvents()
         response.enqueue(object : Callback<List<Event>> {
-                override fun onResponse(p0: Call<List<Event>>, p1: Response<List<Event>>) {
-                    events.value = p1.body() ?: listOf()
-                }
+            override fun onResponse(p0: Call<List<Event>>, p1: Response<List<Event>>) {
+                events.value = p1.body() ?: listOf()
+            }
 
-                override fun onFailure(p0: Call<List<Event>>, p1: Throwable) {
-                    Log.e("Request", p1.message ?: "Request failed")
-                }
-            })
+            override fun onFailure(p0: Call<List<Event>>, p1: Throwable) {
+                Log.e("Request", p1.message ?: "Request failed")
+            }
+        })
     }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp)
+    Column(
+        modifier = Modifier.fillMaxSize()
     ) {
-        items(events.value) { event ->
-            EventItem(event) {
-                val intent = Intent(context, EventDetailActivity::class.java).apply {
-                    putExtra("event", event)
+        Text(
+            text = stringResource(R.string.event_list_title),
+            style = MaterialTheme.typography.headlineMedium.copy(
+                fontWeight = FontWeight.Bold,
+            ),
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            items(events.value) { event ->
+                EventItem(event) {
+                    val intent = Intent(context, EventDetailActivity::class.java).apply {
+                        putExtra("event", event)
+                    }
+                    context.startActivity(intent)
                 }
-                context.startActivity(intent)
             }
         }
     }
@@ -62,8 +80,8 @@ fun EventItem(event: Event, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = event.title, style = MaterialTheme.typography.headlineSmall)
-            Text(text = event.date, style = MaterialTheme.typography.bodyMedium)
-            Text(text = event.location, style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.event_date) + ": ${event.date}", style = MaterialTheme.typography.bodyMedium)
+            Text(text = stringResource(id = R.string.event_location) + ": ${event.location}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

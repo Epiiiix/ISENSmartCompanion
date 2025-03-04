@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -61,7 +62,7 @@ fun HistoryScreen(innerPadding: PaddingValues, db: AppDatabase) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Message History",
+                text = stringResource(id = R.string.message_history_title),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorResource(R.color.black)
@@ -74,7 +75,7 @@ fun HistoryScreen(innerPadding: PaddingValues, db: AppDatabase) {
                     }
                 },
             ) {
-                Text("Delete All", color = colorResource(R.color.white))
+                Text(stringResource(id = R.string.delete_all_button), color = colorResource(R.color.white))
             }
         }
 
@@ -101,7 +102,7 @@ fun HistoryScreen(innerPadding: PaddingValues, db: AppDatabase) {
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text(
-                                text = if (message.isUser) "👤 User" else "🤖 AI",
+                                text = if (message.isUser) stringResource(id = R.string.user_label) else stringResource(id = R.string.ai_label),
                                 fontWeight = FontWeight.Bold,
                                 color = colorResource(R.color.black)
                             )
@@ -141,7 +142,7 @@ fun HistoryScreen(innerPadding: PaddingValues, db: AppDatabase) {
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete message",
+                                    contentDescription = stringResource(id = R.string.delete_message_description),
                                     tint = colorResource(R.color.red)
                                 )
                             }

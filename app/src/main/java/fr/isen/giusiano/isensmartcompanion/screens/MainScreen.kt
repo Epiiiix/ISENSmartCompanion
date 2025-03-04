@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,8 +94,6 @@ fun MainScreen(innerPadding: PaddingValues, db: AppDatabase) {
                         Continue the conversation (you are AI).
                     """.trimIndent()
 
-                    Log.d("AI Prompt", prompt)
-
                     question = TextFieldValue("")
 
                     coroutineScope.launch {
@@ -103,7 +102,7 @@ fun MainScreen(innerPadding: PaddingValues, db: AppDatabase) {
 
 
                             val result = generativeModel.generateContent(prompt)
-                            val aiMessage = Message(text = result.text?.trimEnd() ?: "No response", isUser = false)
+                            val aiMessage = Message(text = result.text?.trimEnd() ?: "", isUser = false)
                             messages = messages + aiMessage
                             messageDao.insert(aiMessage)
                         } catch (e: Exception) {
@@ -175,7 +174,7 @@ fun MessageInputField(
                 decorationBox = { innerTextField ->
                     if (question.text.isEmpty()) {
                         Text(
-                            text = "Ask me a question...",
+                            text = stringResource(id = R.string.ask_question),
                             color = colorResource(R.color.grey),
                             fontSize = 18.sp
                         )

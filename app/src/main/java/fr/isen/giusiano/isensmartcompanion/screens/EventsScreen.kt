@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import fr.isen.giusiano.isensmartcompanion.EventDetailActivity
 import fr.isen.giusiano.isensmartcompanion.api.RetrofitInstance
-import fr.isen.giusiano.isensmartcompanion.model.Event
+import fr.isen.giusiano.isensmartcompanion.models.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

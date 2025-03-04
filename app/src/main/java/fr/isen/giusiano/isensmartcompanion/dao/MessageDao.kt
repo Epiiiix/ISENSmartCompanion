@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import fr.isen.giusiano.isensmartcompanion.model.Message
+import fr.isen.giusiano.isensmartcompanion.models.Message
 
 @Dao
 interface MessageDao {

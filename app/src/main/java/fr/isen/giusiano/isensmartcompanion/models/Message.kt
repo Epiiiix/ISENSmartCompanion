@@ -1,4 +1,4 @@
-package fr.isen.giusiano.isensmartcompanion.model
+package fr.isen.giusiano.isensmartcompanion.models
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

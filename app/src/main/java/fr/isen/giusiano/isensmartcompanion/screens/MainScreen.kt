@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import fr.isen.giusiano.isensmartcompanion.R
 import com.google.ai.client.generativeai.GenerativeModel
 import fr.isen.giusiano.isensmartcompanion.database.AppDatabase
-import fr.isen.giusiano.isensmartcompanion.model.Message
+import fr.isen.giusiano.isensmartcompanion.models.Message
 import kotlinx.coroutines.launch
 
 @Composable

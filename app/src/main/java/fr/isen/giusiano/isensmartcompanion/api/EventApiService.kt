@@ -1,6 +1,6 @@
 package fr.isen.giusiano.isensmartcompanion.api
 
-import fr.isen.giusiano.isensmartcompanion.model.Event
+import fr.isen.giusiano.isensmartcompanion.models.Event
 import retrofit2.Call
 import retrofit2.http.GET
 

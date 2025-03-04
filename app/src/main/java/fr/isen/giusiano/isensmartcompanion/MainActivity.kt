@@ -13,12 +13,14 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.*
-import androidx.compose.runtime.internal.composableLambdaN
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
+import fr.isen.giusiano.isensmartcompanion.database.AppDatabase
 import fr.isen.giusiano.isensmartcompanion.screens.EventsScreen
 import fr.isen.giusiano.isensmartcompanion.screens.HistoryScreen
 import fr.isen.giusiano.isensmartcompanion.screens.MainScreen
@@ -43,6 +45,12 @@ class MainActivity : ComponentActivity() {
 
             val tabBarItems = listOf(homeTab, eventsTab, historyTab)
 
+            val db = Room.databaseBuilder(
+                LocalContext.current,
+                AppDatabase::class.java, "messagesDB"
+            ).fallbackToDestructiveMigration().build()
+
+
             val navController = rememberNavController()
 
             ISENSmartCompanionTheme {
@@ -54,13 +62,13 @@ class MainActivity : ComponentActivity() {
                     Box(Modifier.padding(innerPadding)) {
                         NavHost(navController = navController, startDestination = homeTab.title) {
                             composable(homeTab.title) {
-                                MainScreen(innerPadding)
+                                MainScreen(innerPadding, db)
                             }
                             composable(eventsTab.title) {
                                 EventsScreen(innerPadding)
                             }
                             composable(historyTab.title) {
-                                HistoryScreen(innerPadding)
+                                HistoryScreen(innerPadding, db)
                             }
                         }
 

@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -50,7 +52,21 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.7")
+
+    // Retrofit + GSON
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // AI
+    implementation("com.google.ai.client.generativeai:generativeai:0.1.0")
+
+    // Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -6,6 +6,7 @@
     <string name="bottom_navbar_home">Home</string>
     <string name="bottom_navbar_events">Events</string>
     <string name="bottom_navbar_history">History</string>
+    <string name="bottom_navbar_agenda">Agenda</string>
     <string name="title_activity_event_detail">EventDetailActivity</string>
 
     //EventDetails
@@ -30,4 +31,8 @@
     <string name="delete_message_description">Delete message</string>
     <string name="user_label">👤 User</string>
     <string name="ai_label">🤖 AI</string>
+
+    //AgendaScreen
+    <string name="previous_month">Previous Month</string>
+    <string name="next_month">Next Month</string>
 </resources>

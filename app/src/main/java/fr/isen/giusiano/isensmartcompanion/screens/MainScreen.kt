@@ -1,6 +1,5 @@
 package fr.isen.giusiano.isensmartcompanion.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

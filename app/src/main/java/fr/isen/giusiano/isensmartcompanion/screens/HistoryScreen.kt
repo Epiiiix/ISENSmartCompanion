@@ -84,67 +84,69 @@ fun HistoryScreen(innerPadding: PaddingValues, db: AppDatabase) {
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            itemsIndexed(messages) { index, message ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .background(
-                            if (message.isUser) colorResource(R.color.user_message)
-                            else colorResource(R.color.ai_message),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .padding(12.dp)
-                ) {
-                    Column {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = if (message.isUser) stringResource(id = R.string.user_label) else stringResource(id = R.string.ai_label),
-                                fontWeight = FontWeight.Bold,
-                                color = colorResource(R.color.black)
-                            )
-                            Text(
-                                text = formatDate(message.timestamp),
-                                fontSize = 12.sp,
-                                color = colorResource(R.color.black)
-                            )
-                        }
+            itemsIndexed(messages.chunked(2)) { _, messagePair ->
+                if (messagePair.size == 2) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .background(colorResource(R.color.background), shape = RoundedCornerShape(12.dp))
+                            .padding(12.dp)
+                    ) {
+                        Column {
+                            messagePair.forEach { message ->
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(8.dp)
+                                        .background(
+                                            if (message.isUser) colorResource(R.color.user_message)
+                                            else colorResource(R.color.ai_message),
+                                            shape = RoundedCornerShape(12.dp)
+                                        )
+                                        .padding(12.dp)
+                                ) {
+                                    Text(
+                                        text = if (message.isUser) stringResource(id = R.string.user_label) else stringResource(id = R.string.ai_label),
+                                        fontWeight = FontWeight.Bold,
+                                        color = colorResource(R.color.black)
+                                    )
+                                    Text(
+                                        text = formatDate(message.timestamp),
+                                        fontSize = 12.sp,
+                                        color = colorResource(R.color.black)
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = message.text,
+                                        color = colorResource(R.color.black)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(8.dp))
+                            }
 
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = message.text,
-                            color = colorResource(R.color.black)
-                        )
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End
-                        ) {
-                            IconButton(
-                                onClick = {
-                                    coroutineScope.launch {
-                                        try {
-                                            val pairMessage: Message? = if (message.isUser) messages.getOrNull(index + 1) else messages.getOrNull(index - 1)
-                                            messageDao.delete(message)
-                                            if (pairMessage != null) {
-                                                messageDao.delete(pairMessage)
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                IconButton(
+                                    onClick = {
+                                        coroutineScope.launch {
+                                            try {
+                                                messagePair.forEach { messageDao.delete(it) }
+                                                messages = messageDao.getAll()
+                                            } catch (e: Exception) {
+                                                println("Error delete: ${e.message}")
                                             }
-                                            messages = messageDao.getAll()
-                                        } catch (e: Exception) {
-                                            println("Error delete: ${e.message}")
                                         }
                                     }
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = stringResource(id = R.string.delete_message_description),
+                                        tint = colorResource(R.color.red)
+                                    )
                                 }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = stringResource(id = R.string.delete_message_description),
-                                    tint = colorResource(R.color.red)
-                                )
                             }
                         }
                     }
@@ -153,6 +155,7 @@ fun HistoryScreen(innerPadding: PaddingValues, db: AppDatabase) {
         }
     }
 }
+
 
 fun formatDate(timestamp: Long): String {
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
